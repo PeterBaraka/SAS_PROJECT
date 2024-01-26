@@ -19,7 +19,7 @@ Go to the project directory
   cd SAS_PROJECT
 ```
 
-The project files folder contains the files generated after running the project code.
+The datasets folder contains the files generated after running the project code.
 
 Note: 
 * These files are generated on the virtual machine running SAS and then copied onto the folder.
