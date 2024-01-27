@@ -15,9 +15,10 @@ run;
 
 /* Creation of the cluster (dendogram) via the ward method */
 /* 
-We apply the ward method because through minimization of the variance within the clusters
-we are able to form a clear dendogram
-*/
+WARD method: Tends to produce compact, spherical clusters by minimizing the increase in variance. 
+            It is often considered more appropriate for datasets where clusters have a roughly spherical shape.
+            
+SINGLE method: Tends to produce clusters with more irregular shapes, and it is sensitive to outliers.
 /* 
 To assess outliers, the single method can be applied
 */
