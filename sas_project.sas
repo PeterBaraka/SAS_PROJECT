@@ -136,12 +136,33 @@ proc corr data=sas_proj.yt_coord_1;
     var avgi prin1;
 run;
 
-/* 
-Optional code snippet
-Running the correlation between the seventh princomp with the avgi 
-*/
+proc corr data=sas_proj.yt_coord_1;
+    var avgi prin2;
+run;
+
+proc corr data=sas_proj.yt_coord_1;
+    var avgi prin3;
+run;
+
+proc corr data=sas_proj.yt_coord_1;
+    var avgi prin4;
+run;
+
+proc corr data=sas_proj.yt_coord_1;
+    var avgi prin5;
+run;
+
+
+proc corr data=sas_proj.yt_coord_1;
+    var avgi prin6;
+run;
+
 proc corr data=sas_proj.yt_coord_1;
     var avgi prin7;
+run;
+
+proc corr data=sas_proj.yt_coord_1;
+    var avgi prin8;
 run;
 
 /* Creation of sz_yt with the newly labelled data and calculation of:
@@ -237,18 +258,36 @@ run;
     run;
     %end;
     %mend do_k_cluster;
-    %do_k_cluster
-    
-    data sas_proj.cl_ttest_all;
-        merge
-        sas_proj.cl_ttest_1
-        sas_proj.cl_ttest_2
-        sas_proj.cl_ttest_3
-        sas_proj.cl_ttest_4
-        sas_proj.cl_ttest_5
-        sas_proj.cl_ttest_6;
-        by variable;
-        run;
+    %do_k_cluster;
+
+proc sort data=sas_proj.cl_ttest_1;
+    by variable;
+run;
+
+proc sort data=sas_proj.cl_ttest_2;
+    by variable;
+run;
+
+proc sort data=sas_proj.cl_ttest_3;
+    by variable;
+run;
+
+proc sort data=sas_proj.cl_ttest_4;
+    by variable;
+run;
+
+proc sort data=sas_proj.cl_ttest_5;
+    by variable;
+run;
+
+data sas_proj.cl_ttest_all; merge 
+    sas_proj.cl_ttest_1 
+    sas_proj.cl_ttest_2 
+    sas_proj.cl_ttest_3 
+    sas_proj.cl_ttest_4 
+    sas_proj.cl_ttest_5;
+    by variable;
+    run;
 
 /* Creation of labels - data identity card */
 proc contents data=sas_proj.sz_yt_long out=sas_proj.yt_contents;
