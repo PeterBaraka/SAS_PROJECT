@@ -74,12 +74,12 @@ proc ttest;
 run;
 
 /* 
-Creation on new yt_fake dataset with new cluster variable set to 6 
+Creation on new yt_fake dataset with new cluster variable set to 4 
 This allows us to test our original dataset against the newly created fake cluster dataset
 */
 data sas_proj.yt_fake; 
     set sas_proj.yt_1;
-    cluster=6;
+    cluster=4;
 run;
 
 /* Creating a new dataset made from the main dataset and the recently created yt_fake */
@@ -87,40 +87,22 @@ data sas_proj.yt_append;
     set sas_proj.yt_1 sas_proj.yt_fake;
 run;
 
-/* Description of the first cluster */
-proc ttest data=sas_proj.yt_append;
-    where cluster=1 or cluster=6;
-    var d10_1-d10_8;
-    class cluster;
-run;
-
-/* Description of the second cluster */
-proc ttest data=sas_proj.yt_append;
-    where cluster=2 or cluster=6;
-    var d10_1-d10_8;
-    class cluster;
-run;
-
-/* Description of the third cluster */
-proc ttest data=sas_proj.yt_append;
-    where cluster=3 or cluster=6;
-    var d10_1-d10_8;
-    class cluster;
-run;
-
-/* Description of the third cluster */
-proc ttest data=sas_proj.yt_append;
-    where cluster=4 or cluster=6;
-    var d10_1-d10_8;
-    class cluster;
-run;
-
-/* Description of the third cluster */
-proc ttest data=sas_proj.yt_append;
-    where cluster=5 or cluster=6;
-    var d10_1-d10_8;
-    class cluster;
-run;
+/* Description of initial clusters */
+%macro do_k_cluster;
+    %do k=1 %to 3;
+    proc ttest data=sas_proj.yt_append;
+        where cluster=&k or cluster=4;
+        class cluster;
+        var d10_1-d10_8;
+        /* ttests => name of output test result
+        Naming standard increments for each new value (&k)*/
+        ods output ttests=sas_proj.cluster_desc_&k (where=(method='Satterthwaite')
+        rename=(tvalue=tvalue_&k) rename=(probt=prob_&k));
+    run;
+    %end;
+    %mend do_k_cluster;
+    %do_k_cluster;
+    run;
 
 /* Running the correlation procedure on the cluster variables */
 proc corr data=sas_proj.yt_1;
@@ -224,6 +206,12 @@ proc freq data=sas_proj.sz_yt_2;
     table age*cluster / expected all;
 run;
 
+/* Run the various statistical tests on the newly merged dataset */
+proc freq data=sas_proj.sz_yt_2;
+    /* All - considers all statistical tests */
+    table occupation*cluster / expected all;
+run;
+
 /* Creation of new fake dataset */
 data sas_proj.sz_yt_fake; set sas_proj.sz_yt_2;
     cluster=5;
@@ -251,6 +239,8 @@ run;
     %end;
     %mend do_k_cluster;
     %do_k_cluster;
+    run;
+run;
 
 proc sort data=sas_proj.cl_ttest_1;
     by variable;
@@ -275,6 +265,41 @@ data sas_proj.cl_ttest_all; merge
     sas_proj.cl_ttest_4;
     by variable;
     run;
+run;
+
+%macro do_k_cluster;
+    %do k=1 %to 4;
+    proc ttest data=sas_proj.sz_yt_long;
+        where cluster=&k or cluster=5;
+        class cluster;
+        var dev_usage;
+        /* ttests => name of output test result
+        Naming standard increments for each new value (&k)*/
+        ods output ttests=sas_proj.dev_usage&k (where=(method='Satterthwaite')
+        rename=(tvalue=tvalue_&k) rename=(probt=prob_&k));
+    run;
+    %end;
+    %mend do_k_cluster;
+    %do_k_cluster;
+    run;
+run;
+    
+%macro do_k_cluster;
+    %do k=1 %to 4;
+    proc ttest data=sas_proj.sz_yt_long;
+        where cluster=&k or cluster=5;
+        class cluster;
+        var yt_usage;
+        /* ttests => name of output test result
+        Naming standard increments for each new value (&k)*/
+        ods output ttests=sas_proj.yt_usage&k (where=(method='Satterthwaite')
+        rename=(tvalue=tvalue_&k) rename=(probt=prob_&k));
+    run;
+    %end;
+    %mend do_k_cluster;
+    %do_k_cluster;
+    run;
+run;
 
 /* Creation of labels - data identity card */
 proc contents data=sas_proj.sz_yt_long out=sas_proj.yt_contents;
