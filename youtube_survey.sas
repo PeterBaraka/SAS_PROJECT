@@ -21,20 +21,20 @@ proc tree;
 run;
 
 /* 
-Creation of uncorrelated variables (principle components),
-it is applied to identify patterns by using the principle components
+Creation of uncorrelated variables (principal components),
+it is applied to identify patterns by using the principal components
 as they capture the most important data
 */
 proc princomp data=sas_proj.yt_dataset;
     var d10_1-d10_8;
 run;
 
-/* Storing the principle components in a new dataset yt_coord  */
+/* Storing the principal components in a new dataset yt_coord  */
 proc princomp data=sas_proj.yt_dataset out=sas_proj.yt_coord;
     var d10_1-d10_8;
 run;
 
-/* Setting a column with the means of the each of the cluster variables */
+/* Setting a column with the means of each of the cluster variables */
 data sas_proj.yt_coord_1; set sas_proj.yt_coord;
     avgi=mean(of d10_1-d10_8);
 run;
@@ -79,7 +79,7 @@ proc princomp data=sas_proj.sz_yt out=sas_proj.sz_yt_1;
     var new_:; 
 run;
 
-/* Creation of dendogram on newly labelled variables */
+/* Creation of dendrogram on newly labelled variables */
 proc cluster data=sas_proj.sz_yt_1 method=ward outtree=sas_proj.sz_tree;
     var prin1-prin4;
     id id;
@@ -130,7 +130,7 @@ run;
 /**
 * 
 */
-/* Macro to produce 5 analysis of our 5 clusters */
+/* Macro to produce 5 descriptions of our 5 clusters */
 %macro do_k_cluster;
     %do k=1 %to 4;
     proc ttest data=sas_proj.sz_yt_long;
