@@ -1,11 +1,49 @@
 /* Setting of the SAS library */
 LIBNAME sas_proj 'C:\Users\bbsstudent\Desktop\YouTube_Project';
 
-/* Creation of sz_yt with the newly labelled data and calculation of:
-1. mean
-2. Minimum values
-3. Maximum values
+/* Reading the form CSV data */
+proc import 
+   datafile="C:\Users\bbsstudent\Desktop\YouTube_Project\yt_dataset.csv" 
+   out=sas_proj.yt_dataset
+   dbms=csv
+   replace;
+run;
+
+/* Print the dataset */
+proc print data=sas_proj.yt_dataset;
+run;
+
+proc cluster data=sas_proj.yt_dataset method=ward; /*method=single;*/ 
+    var d10_1-d10_8;
+run;
+
+proc tree;
+run;
+
+/* 
+Creation of uncorrelated variables (principle components),
+it is applied to identify patterns by using the principle components
+as they capture the most important data
 */
+proc princomp data=sas_proj.yt_dataset;
+    var d10_1-d10_8;
+run;
+
+/* Storing the principle components in a new dataset yt_coord  */
+proc princomp data=sas_proj.yt_dataset out=sas_proj.yt_coord;
+    var d10_1-d10_8;
+run;
+
+/* Setting a column with the means of the each of the cluster variables */
+data sas_proj.yt_coord_1; set sas_proj.yt_coord;
+    avgi=mean(of d10_1-d10_8);
+run;
+
+/* Running the correlation between the first princomp with the avgi */
+proc corr data=sas_proj.yt_coord_1;
+    var avgi prin1-prin8;
+run;
+
 data sas_proj.sz_yt; set sas_proj.yt_dataset;
     avgi=mean(of d10_1-d10_8);
     mini=min(of d10_1-d10_8);
@@ -184,35 +222,3 @@ data sas_proj.cl_ttest_all_1;
         by variable;
         if a;
 run;
-
-
-/* Pending Graph
-/* proc princomp data=sas_proj.sz_yt_2 out=sas_proj.principal_components outstat=sas_proj.loadings;
-    var new_1-new_8 dev_usage yt_usage;
-    run;
-run;
-
-data sas_proj.loadings_plot;
-    set sas_proj.loadings;
-    /* Only keep the rows with loadings */
-    /* if TYPE = 'PRIN'; */
-    /* Create a separate row for each variable's loading on each principal component */
-    /* array pcs{} prin1-prin10;
-    do i = 1 to dim(pcs);
-        Prin = i;
-        Loading = pcs{i};
-        output;
-    end; */
-    /* Drop the original columns and the loop index */
-    /* drop new1-new8 yt_usage dev_usage TYPE NAME i; 
-    rename NAME = Variable;
-run;
-
-proc sgplot data=sas_proj.loadings_plot; */
-    /* Use a scatter plot if you just want points or a vector plot to see direction */
-    /* scatter x=Prin y=Loading / group=Variable markerattrs=(symbol=CircleFilled); */
-    /* Labels */
-    /* scatter x=Prin y=Loading / datalabel=Variable;
-    xaxis label='Principal Component';
-    yaxis label='Loading';
-run; */
