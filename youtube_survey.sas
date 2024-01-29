@@ -39,7 +39,7 @@ data sas_proj.yt_coord_1; set sas_proj.yt_coord;
     avgi=mean(of d10_1-d10_8);
 run;
 
-/* Running the correlation between the first princomp with the avgi */
+/* Running the correlation between the first princomp with the avgi to check for the presence of size effect*/
 proc corr data=sas_proj.yt_coord_1;
     var avgi prin1-prin8;
 run;

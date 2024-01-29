@@ -186,8 +186,8 @@ data sas_proj.cl_ttest_all_1;
 run;
 
 
-/* Pending Graph
-/* proc princomp data=sas_proj.sz_yt_2 out=sas_proj.principal_components outstat=sas_proj.loadings;
+/* Pending Graph */
+proc princomp data=sas_proj.sz_yt_2 out=sas_proj.principal_components outstat=sas_proj.loadings;
     var new_1-new_8 dev_usage yt_usage;
     run;
 run;
@@ -195,24 +195,24 @@ run;
 data sas_proj.loadings_plot;
     set sas_proj.loadings;
     /* Only keep the rows with loadings */
-    /* if TYPE = 'PRIN'; */
+    if TYPE = 'PRIN';
     /* Create a separate row for each variable's loading on each principal component */
-    /* array pcs{} prin1-prin10;
+    array pcs{} prin1-prin10;
     do i = 1 to dim(pcs);
         Prin = i;
         Loading = pcs{i};
         output;
-    end; */
+    end;
     /* Drop the original columns and the loop index */
-    /* drop new1-new8 yt_usage dev_usage TYPE NAME i; 
+    drop new1-new8 yt_usage dev_usage TYPE NAME i; 
     rename NAME = Variable;
 run;
 
-proc sgplot data=sas_proj.loadings_plot; */
+proc sgplot data=sas_proj.loadings_plot;
     /* Use a scatter plot if you just want points or a vector plot to see direction */
-    /* scatter x=Prin y=Loading / group=Variable markerattrs=(symbol=CircleFilled); */
+    scatter x=Prin y=Loading / group=Variable markerattrs=(symbol=CircleFilled);
     /* Labels */
-    /* scatter x=Prin y=Loading / datalabel=Variable;
+    scatter x=Prin y=Loading / datalabel=Variable;
     xaxis label='Principal Component';
     yaxis label='Loading';
-run; */
+run;
