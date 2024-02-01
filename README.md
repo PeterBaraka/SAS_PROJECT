@@ -1,10 +1,5 @@
 # YouTube SAS Project
 
-Project form link
-```
-  https://forms.gle/3sCg9nTbv99oEWs8A
-```
-
 ## Setup Locally
 
 Clone the project
@@ -23,4 +18,4 @@ The datasets folder contains the files generated after running the project code.
 
 Note: 
 * These files are generated on the virtual machine running SAS and then copied onto the folder.
-* Screenshot folder contains images of the results of the relevant tests done.
+* The screenshot folder contains images of the results of the relevant tests done.
