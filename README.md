@@ -1,6 +1,6 @@
 # YouTube SAS Project
 
-Assessment of YouTube preferences by a select demographic covering multiple age groups and lifestyles
+Assessment of YouTube preferences from a select demographic covering multiple age groups and lifestyles
 
 ## Setup Locally
 
