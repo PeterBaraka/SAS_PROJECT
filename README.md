@@ -1,5 +1,7 @@
 # YouTube SAS Project
 
+Assessment of YouTube preferences by a select demographic covering multiple age groups and lifestyles
+
 ## Setup Locally
 
 Clone the project
